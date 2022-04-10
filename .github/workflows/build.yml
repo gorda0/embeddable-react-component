@@ -18,11 +18,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
- 
+      - name: Tests
+        run: npm run test
       - name: Build
         run: | 
           npm i
-          npm run bundle:prod
+          npm i -g webpack webpack-cli
+          webpack --mode=production
       - name: Commit new bundle
         run: |
           git config --global user.name 'Douglas R. Guimarães'

@@ -1,11 +1,10 @@
 {
   "name": "alibardo",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "",
   "private": true,
   "main": "index.js",
   "scripts": {
-    "bundle:prod": "npm run test && webpack --mode=production",
     "bundle": "npm run test && webpack --mode=development",
     "example": "npm run bundle && node server.js"
   },
