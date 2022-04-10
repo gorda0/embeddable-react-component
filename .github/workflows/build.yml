@@ -27,7 +27,8 @@ jobs:
         run: |
           git config --global user.name 'Douglas R. Guimarães'
           git config --global user.email 'eu@rgdoug.com'
-          git commit -am "Automated bundle"
+          git add -A
+          git commit -m "Automated bundle"
           git push
       
 
