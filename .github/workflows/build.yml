@@ -20,6 +20,8 @@ jobs:
           node-version: '14'
       - name: Tests
         run: npm run test
+      - name: Check last version
+        run: node checkversion.js
       - name: Build
         run: | 
           npm i
