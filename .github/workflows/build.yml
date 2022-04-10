@@ -22,14 +22,12 @@ jobs:
         run: | 
           npm i
           npm run bundle:prod
-      steps:
-      - uses: actions/checkout@v2
       - name: Commit new bundle
+        uses: actions/checkout@v2
         run: |
           git config --global user.name 'Douglas R. Guimarães'
           git config --global user.email 'eu@rgdoug.com'
           git commit -am "Automated bundle"
           git push
- 
       
 
