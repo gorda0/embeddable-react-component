@@ -3,10 +3,13 @@
   "version": "1.0.1",
   "description": "",
   "private": true,
-  "main": "index.js",
+  "main": "./index.js",
   "scripts": {
     "bundle": "npm run test && webpack --mode=development",
-    "example": "npm run bundle && node server.js"
+    "watch:dev": "webpack --watch --mode=development",
+    "example": "npm run bundle && node server.js",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": {
     "type": "git",
@@ -28,11 +31,16 @@
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@storybook/addon-actions": "^6.4.21",
+    "@storybook/addon-essentials": "^6.4.21",
+    "@storybook/addon-interactions": "^6.4.21",
+    "@storybook/addon-links": "^6.4.21",
+    "@storybook/react": "^6.4.21",
+    "@storybook/testing-library": "0.0.9",
     "babel-loader": "^8.2.4",
     "html-webpack-plugin": "^5.5.0",
     "terser-webpack-plugin": "^5.3.1",
     "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2",
-    "webpack-shell-plugin-next": "^2.2.2"
+    "webpack-cli": "^4.9.2"
   }
 }

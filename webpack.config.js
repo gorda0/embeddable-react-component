@@ -1,21 +1,14 @@
 const path = require("path");
-const WebpackShellPluginNext = require("webpack-shell-plugin-next");
 const TerserPlugin = require("terser-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { name, version } = require("./package.json");
-const execScript = (on, scripts) =>
-  new WebpackShellPluginNext({
-    [on]: {
-      scripts,
-    },
-  });
+const { name } = require("./package.json");
 
 module.exports = (_, { mode }) => {
   const fileExtension =
     mode === "production" ? ".bundle.js" : ".development.js";
 
-  const filename = `[name]-${version}` + fileExtension;
-
+  const filename = `[name]` + fileExtension;
+  const noReactFilename = `[name]` + fileExtension;
   const outputPath = path.resolve(__dirname, "dist");
 
   const optimization = {
@@ -30,6 +23,16 @@ module.exports = (_, { mode }) => {
   const entry = {
     [name]: "./index.js",
     [`${name}-autoload`]: "./autoload.js",
+  };
+
+  const noReactEntry = {
+    [`${name}-noreact`]: "./index.js",
+    [`${name}-noreact-autoload`]: "./autoload.js",
+  };
+
+  const externals =  {
+    react: "React",
+    "react-dom": "ReactDOM",
   };
 
   const module = {
@@ -52,16 +55,24 @@ module.exports = (_, { mode }) => {
     output: {
       path: outputPath + "/cjs",
       filename,
+      libraryTarget: "commonjs-module",
     },
     module,
     plugins: [
-      execScript("onBuildEnd", [
-        `cp ./dist/cjs/${name}-${version}${fileExtension} ./dist/cjs/${name}-latest${fileExtension}`,
-        `cp ./dist/cjs/${name}-autoload-${version}${fileExtension} ./dist/cjs/${name}-autoload-latest${fileExtension}`,
-      ]),
-      getTemplate(),
+      ...(mode !== "production"  ? [getTemplate()] : []),
     ],
     optimization,
+  };
+
+  const noReactCjs = {
+    ...cjs,
+    entry: noReactEntry,
+    output: {
+      path: outputPath + "/cjs",
+      filename: noReactFilename,
+      libraryTarget: "commonjs-module",
+    },
+    externals
   };
 
   const umd = {
@@ -74,17 +85,10 @@ module.exports = (_, { mode }) => {
     },
     module,
     plugins: [
-      execScript("onBuildEnd", [
-        `cp ./dist/umd/${name}-${version}${fileExtension} ./dist/umd/${name}-latest${fileExtension}`,
-        `cp ./dist/umd/${name}-autoload-${version}${fileExtension} ./dist/umd/${name}-autoload-latest${fileExtension}`,
-      ]),
     ],
-    externals: {
-      react: "React",
-      "react-dom": "ReactDOM",
-    },
+    externals,
     optimization,
   };
 
-  return [cjs, umd];
+  return [cjs, noReactCjs, umd];
 };
